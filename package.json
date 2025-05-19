@@ -61,6 +61,7 @@
   },
   "repository": "gideonadeti/database-backup-utility",
   "scripts": {
+    "dev": "tsc -w",
     "build": "shx rm -rf dist && tsc -b",
     "lint": "eslint",
     "postpack": "shx rm -f oclif.manifest.json",
