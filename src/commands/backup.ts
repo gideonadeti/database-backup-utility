@@ -2,7 +2,6 @@ import 'dotenv/config'
 import {Command, Flags} from '@oclif/core'
 
 import {backupPostgres} from '../utils/backup-db.js'
-import detectDbType from '../utils/detect-db-type.js'
 
 export default class Backup extends Command {
   static override description = 'Backup a database'
@@ -20,7 +19,7 @@ export default class Backup extends Command {
       this.error('Database URL is required.')
     }
 
-    const dbType = detectDbType(url)
+    const dbType = new URL(url).protocol.replace(':', '')
 
     switch (dbType) {
       case 'postgres': {
