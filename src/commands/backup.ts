@@ -8,6 +8,7 @@ export default class Backup extends Command {
   static override description = 'Backup a database'
   static override examples = ['<%= config.bin %> <%= command.id %>']
   static override flags = {
+    output: Flags.string({char: 'o', default: './dbu-backups', description: 'Output directory'}),
     url: Flags.string({char: 'u', description: 'Database URL'}),
   }
 
