@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import {Command, Flags} from '@oclif/core'
 
+import {chalkError} from '../utils/apply-chalk.js'
 import {backupPostgres} from '../utils/backup-db.js'
 
 export default class Backup extends Command {
@@ -16,7 +17,7 @@ export default class Backup extends Command {
     const url = flags.url || process.env.DB_URL
 
     if (!url) {
-      this.error('Database URL is required.')
+      this.error(chalkError('Database URL not found', 'Use --url or set DB_URL environment variable'))
     }
 
     const dbType = new URL(url).protocol.replace(':', '')
