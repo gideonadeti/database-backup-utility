@@ -17,7 +17,7 @@ export default class Backup extends Command {
     const url = flags.url || process.env.DB_URL
 
     if (!url) {
-      this.error(chalkError('Database URL not found', 'Use --url or set DB_URL environment variable'))
+      this.error(chalkError('Database URL not provided', 'Use --url or set DB_URL environment variable'))
     }
 
     try {
