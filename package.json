@@ -10,7 +10,13 @@
   "dependencies": {
     "@oclif/core": "^4",
     "@oclif/plugin-help": "^6",
-    "@oclif/plugin-plugins": "^5"
+    "@oclif/plugin-plugins": "^5",
+    "chalk": "^5.4.1",
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.5.0",
+    "execa": "^9.5.3",
+    "fs-extra": "^11.3.0",
+    "ora": "^8.2.0"
   },
   "devDependencies": {
     "@eslint/compat": "^1",
