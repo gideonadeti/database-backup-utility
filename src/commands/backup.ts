@@ -14,6 +14,7 @@ export default class Backup extends Command {
 
   public async run() {
     const {flags} = await this.parse(Backup)
+    const {output} = flags
     const url = flags.url || process.env.DB_URL
 
     if (!url) {
@@ -25,7 +26,7 @@ export default class Backup extends Command {
 
       switch (dbType) {
         case 'postgresql': {
-          await backupPostgres(url)
+          await backupPostgres(url, output)
 
           break
         }
@@ -36,7 +37,7 @@ export default class Backup extends Command {
       }
     } catch (error) {
       console.error(error)
-      this.error(chalkError(`Failed to backup your database`))
+      this.error(chalkError(`Failed to backup database`))
     }
   }
 }
