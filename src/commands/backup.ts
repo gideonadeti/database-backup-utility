@@ -20,12 +20,23 @@ export default class Backup extends Command {
       this.error(chalkError('Database URL not found', 'Use --url or set DB_URL environment variable'))
     }
 
-    const dbType = new URL(url).protocol.replace(':', '')
+    try {
+      const dbType = url.split(':')[0]
 
-    switch (dbType) {
-      case 'postgres': {
-        return backupPostgres(url)
+      switch (dbType) {
+        case 'postgresql': {
+          await backupPostgres(url)
+
+          break
+        }
+
+        default: {
+          this.error(chalkError('Unsupported database type', 'Supported database types: postgresql'))
+        }
       }
+    } catch (error) {
+      console.error(error)
+      this.error(chalkError(`Failed to backup your database`))
     }
   }
 }
