@@ -2,7 +2,7 @@ import 'dotenv/config'
 import {Command, Flags} from '@oclif/core'
 
 import {chalkError} from '../utils/apply-chalk.js'
-import {backupPostgres} from '../utils/backup-db.js'
+import {backupMongoDB, backupPostgres} from '../utils/backup-db.js'
 
 export default class Backup extends Command {
   static override description = 'Backup a database'
@@ -25,6 +25,12 @@ export default class Backup extends Command {
       const dbType = url.split(':')[0]
 
       switch (dbType) {
+        case 'mongodb': {
+          await backupMongoDB(url, output)
+
+          break
+        }
+
         case 'postgresql': {
           await backupPostgres(url, output)
 

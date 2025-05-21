@@ -57,4 +57,41 @@ const backupPostgres = async (dbUrl: string, outputDir: string) => {
   }
 }
 
-export {backupPostgres}
+const backupMongoDB = async (dbUrl: string, outputDir: string) => {
+  await fse.ensureDir(outputDir)
+
+  // Parse and validate URL
+  const parsedUrl = new URL(dbUrl)
+  const user = parsedUrl.username
+  const {password} = parsedUrl
+  const host = parsedUrl.hostname
+  const port = parsedUrl.port || '27017' // Default MongoDB port
+  const dbName = parsedUrl.pathname.replace(/^\//, '')
+
+  if (!host) throw new Error('Missing host in the MongoDB URL')
+  if (!dbName) throw new Error('Missing database name in the MongoDB URL')
+  if (!user) throw new Error('Missing username in the MongoDB URL')
+  if (!password) throw new Error('Missing password in the MongoDB URL')
+
+  // Build output path (folder format)
+  const timestamp = format(new Date(), 'yyyy-MM-dd_HH-mm-ss')
+  const folderName = `${dbName}_${timestamp}`
+  const folderPath = path.join(outputDir, folderName)
+
+  const spinner = ora(`Backing up MongoDB database "${dbName}" to ${folderPath}...`).start()
+
+  // Build connection string for mongodump
+  const mongoUri = `mongodb://${user}:${password}@${host}:${port}/${dbName}?authSource=admin`
+
+  try {
+    await execa('mongodump', [`--uri=${mongoUri}`, `--out=${folderPath}`])
+
+    spinner.succeed(`Backup saved to ${folderPath}`)
+  } catch (error) {
+    spinner.fail()
+
+    throw error
+  }
+}
+
+export {backupMongoDB, backupPostgres}
